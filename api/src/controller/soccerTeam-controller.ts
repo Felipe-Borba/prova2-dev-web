@@ -68,4 +68,18 @@ export default class SoccerTeamController {
       return next(error);
     }
   }
+
+  async addPlayer(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { soccerTeamId, playerId } = request.params;
+      const soccerTeam = await prisma.soccerTeam.update({
+        where: { id: soccerTeamId },
+        data: { Players: { connect: { id: playerId } } },
+      });
+
+      return response.json(soccerTeam);
+    } catch (error) {
+      return next(error);
+    }
+  }
 }

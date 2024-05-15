@@ -33,4 +33,5 @@ router.get("/", controller.list);
 
 router.get("/:id", controller.getById);
 
+router.post("/:soccerTeamId/add-player/:playerId", controller.addPlayer);
 export default router;
