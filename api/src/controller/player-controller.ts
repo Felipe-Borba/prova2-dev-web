@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 export default class PlayerController {
   async create(request: Request, response: Response, next: NextFunction) {
     try {
-      // const { name,  } = request.body;
-      // const player = await prisma.player.create({
-      // });
-      // return response.json(player);
+      const data = request.body;
+      const player = await prisma.player.create({ data });
+
+      return response.json(player);
     } catch (error) {
       return next(error);
     }
@@ -17,12 +17,13 @@ export default class PlayerController {
 
   async update(request: Request, response: Response, next: NextFunction) {
     try {
-      // const { name, email, id } = request.body;
-      // const user = await prisma.user.update({
-      //   where: { id },
-      //   data: { name, email },
-      // });
-      // return response.json(user);
+      const { id, ...data } = request.body;
+      const player = await prisma.player.update({
+        where: { id },
+        data,
+      });
+
+      return response.json(player);
     } catch (error) {
       return next(error);
     }
@@ -30,11 +31,12 @@ export default class PlayerController {
 
   async delete(request: Request, response: Response, next: NextFunction) {
     try {
-      // const { id } = request.params;
-      // const user = await prisma.user.delete({
-      //   where: { id },
-      // });
-      // return response.status(204).json({});
+      const { id } = request.params;
+      const player = await prisma.player.delete({
+        where: { id },
+      });
+
+      return response.status(204).json({});
     } catch (error) {
       return next(error);
     }
@@ -42,10 +44,11 @@ export default class PlayerController {
 
   async list(request: Request, response: Response, next: NextFunction) {
     try {
-      // const user = await prisma.user.findMany({ orderBy: { email: "asc" } });
-      // return response.json(
-      //   user.map((a) => ({ id: a.id, name: a.name, email: a.email }))
-      // );
+      const players = await prisma.player.findMany({
+        orderBy: { name: "asc" },
+      });
+
+      return response.json(players);
     } catch (error) {
       return next(error);
     }
@@ -53,11 +56,12 @@ export default class PlayerController {
 
   async getById(request: Request, response: Response, next: NextFunction) {
     try {
-      // const { id } = request.params;
-      // const user = await prisma.user.findUnique({
-      //   where: { id },
-      // });
-      // return response.json(user);
+      const { id } = request.params;
+      const player = await prisma.player.findUnique({
+        where: { id },
+      });
+
+      return response.json(player);
     } catch (error) {
       return next(error);
     }
