@@ -61,6 +61,7 @@ export default class SoccerTeamController {
       const { id } = request.params;
       const soccerTeam = await prisma.soccerTeam.findUnique({
         where: { id },
+        include: { Players: { orderBy: { name: "asc" } } },
       });
 
       return response.json(soccerTeam);
@@ -72,6 +73,17 @@ export default class SoccerTeamController {
   async addPlayer(request: Request, response: Response, next: NextFunction) {
     try {
       const { soccerTeamId, playerId } = request.params;
+      const player = await prisma.player.findUniqueOrThrow({
+        where: { id: playerId },
+        include: { soccerTeams: { orderBy: { foundation: "asc" } } },
+      });
+
+      if (player.soccerTeams.length >= 1) {
+        throw new Error(
+          "this player can not be in more then one soccer team at the same time"
+        );
+      }
+
       const soccerTeam = await prisma.soccerTeam.update({
         where: { id: soccerTeamId },
         data: { Players: { connect: { id: playerId } } },
