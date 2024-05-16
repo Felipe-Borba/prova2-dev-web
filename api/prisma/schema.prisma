@@ -16,7 +16,7 @@ datasource db {
 model Player {
   id          String       @id @default(uuid())
   name        String       @unique
-  age         Int
+  age         Int //deveria ser data de nascimento mas blz
   position    String
   nationality String
   soccerTeams SoccerTeam[]
@@ -33,4 +33,16 @@ model SoccerTeam {
   Players    Player[]
 
   @@map("soccerTeam")
+}
+
+model Match {
+  id        String   @id @default(uuid())
+  date      DateTime
+  place     String
+  score     String
+  homeTeam  String
+  visitTeam String
+  ended     Boolean
+
+  @@map("mathes")
 }
